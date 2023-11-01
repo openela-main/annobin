@@ -1,0 +1,12 @@
+diff -rup annobin.orig/gcc-plugin/annobin.cc annobin-10.64/gcc-plugin/annobin.cc
+--- annobin.orig/gcc-plugin/annobin.cc	2022-04-06 12:55:02.350469755 +0100
++++ annobin-10.64/gcc-plugin/annobin.cc	2022-04-06 12:55:28.503296390 +0100
+@@ -1851,7 +1851,7 @@ annobin_emit_start_sym_and_version_note
+ 	 Ensure that we do not have empty special text sections so that the
+ 	 annobin start symbols are never beyond the end of the sections.  */
+ #ifndef ANNOBIN_NOP_INSN
+-#define ANNOBIN_NOP_INSN ".nop"
++#define ANNOBIN_NOP_INSN "nop"
+ #endif
+       if (* suffix && enable_ppc64_nops)
+ 	annobin_emit_asm (ANNOBIN_NOP_INSN,
