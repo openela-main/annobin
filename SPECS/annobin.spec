@@ -1,8 +1,8 @@
 
 Name:    annobin
 Summary: Annotate and examine compiled binary files
-Version: 10.94
-Release: 1%{?dist}
+Version: 11.13
+Release: 2%{?dist}
 License: GPLv3+
 # Maintainer: nickc@redhat.com
 # Web Page: https://sourceware.org/annobin/
@@ -16,7 +16,7 @@ License: GPLv3+
 # Use "--without annocheck" to disable the installation of the annocheck program.
 %bcond_without annocheck
 
-# Use "--with debuginfod" to add support for debuginfod to be compiled into
+# Use "--with debuginfod" to force support for debuginfod to be compiled into
 # the annocheck program.  By default the configure script will check for
 # availablilty at build time, but this might not match the run time situation.
 # FIXME: Add a --without debuginfod option to forcefully disable the configure
@@ -62,8 +62,6 @@ Source: https://nickc.fedorapeople.org/%{annobin_sources}
 %global annobin_source_dir %{_usrsrc}/annobin
 
 # Insert patches here, if needed.  Eg:
-# Patch01: annobin-foo.patch
-# Insert patches here, if needed.
 Patch01: annobin-nop.patch
 Patch02: annobin-annocheck-no-debuginfod.patch
 
@@ -121,7 +119,7 @@ Requires: (gcc >= %{gcc_major} with gcc < %{gcc_next})
 Requires: gcc
 %endif
 
-BuildRequires: gcc gcc-plugin-devel gcc-c++
+BuildRequires: gcc gcc-plugin-devel gcc-c++ sharutils
 # The documentation uses pod2man...
 BuildRequires: perl perl-podlators
 %if %{with clangplugin}
@@ -156,7 +154,7 @@ Summary: Test scripts and binaries for checking the behaviour and output of the 
 Provides a means to test the generation of annotated binaries and the parsing
 of the resulting files.
 
-BuildRequires: make
+BuildRequires: make sharutils
 
 %if %{with debuginfod}
 BuildRequires: elfutils-debuginfod-client-devel
@@ -340,13 +338,17 @@ rm -f %{buildroot}%{_infodir}/dir
 
 %if %{with tests}
 %check
-# Change the following line to "make check || :" on RHEL7 or if you need to see the
-# test suite logs in order to diagnose a test failure.
-make -k check CLANG_TESTS="check-pre-clang-13"
-
+# The first "make check" is run with "|| :" so that we can capture any logs
+# from failed tests.  The second "make check" is there so that the build
+# will fail if any of the tests fail.
+make check CLANG_TESTS="check-pre-clang-13" || :
 if [ -f tests/test-suite.log ]; then
-    cat tests/*.log
+    cat tests/test-suite.log
 fi
+# If necessary use uuencode to preserve test binaries here.  For example:
+uuencode tests/tmp_atexit/atexit.strip atexit.strip
+make check CLANG_TESTS="check-pre-clang-13"
+
 %endif
 
 #---------------------------------------------------------------------------------
@@ -383,14 +385,42 @@ fi
 %files annocheck
 %{_includedir}/libannocheck.h
 %{_libdir}/libannocheck.*
+%{_libdir}/pkgconfig/libannocheck.pc
 %{_bindir}/annocheck
 %doc %{_mandir}/man1/annocheck.1.gz
-%{_libdir}/pkgconfig/libannocheck.pc
 %endif
 
 #---------------------------------------------------------------------------------
 
 %changelog
+* Mon Jul 10 2023 Marek Polacek  <polacek@redhat.com> - 11.13-2
+- NVR bump to allow rebuilding.  (#2218984)
+
+* Thu Mar 09 2023 Nick Clifton  <nickc@redhat.com> - 11.13-1
+- NVR bump to allow rebuilding.  (#2162746)
+
+* Fri Mar 03 2023 Nick Clifton  <nickc@redhat.com> - 11.12-1
+- Rebase to 11.12.  Brings in:
+- GCC Plugin: Do not run if other plugins are active.  (#2162746)
+- Annocheck: Add code to handle glibc functions built without LTO.
+- Libannocheck: Fix thinko in debugging code.
+- Annocheck: Fix LTO test.
+- Notes: Display notes held in separate debuginfo files.
+- Annocheck: Fix atexit test.  Fix recording of version numbers.  (#2165528)
+- LLVM & Clang Plugins: Build with branch protection on AArch64.  (#2164364)
+- Libannocheck: Fix bug causing infinite looping when running tests.
+- Annocheck: Fix handling of file built by multiple versions of gcc.  (#2160700)
+- Annocheck: Fix handling of empty files.  (#2159292)
+- Annocheck: Add crti.o and crtn.o to the list of known glibc special files.  (#2158740)
+- Annocheck: Fix memory leaks.
+- Annocheck: Do not treat object files as if they did not contain any code.  (#2158182)
+- Annocheck: Add more special glibc filenames.
+- Annocheck: Improve handling of tool versions.
+- GCC plugin: Fix building with gcc-13.
+- Annocheck: Add test for binaries built by cross compilers.
+- Annocheck: Improve heuristic used to detect binaries without code. (#2144533)
+- Annocheck: Avoid using debug filename when parsing notes in a debuginfo file.  (#2152280)
+
 * Wed Dec 07 2022 Nick Clifton  <nickc@redhat.com> - 10.94-1
 - Rebase to 10.94.  (#2151312)
 - Annocheck: Better detection of binaries which do not contain code.  (#2144533)

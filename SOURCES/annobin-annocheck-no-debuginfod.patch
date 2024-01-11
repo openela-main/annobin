@@ -1,11 +1,12 @@
---- annobin.orig/annocheck/annocheck.c	2022-03-24 11:58:57.549279537 +0000
-+++ annobin-10.58/annocheck/annocheck.c	2022-03-24 11:59:09.574237612 +0000
-@@ -21,6 +21,8 @@
+diff -rup annobin.orig/annocheck/annocheck.c annobin-11.12/annocheck/annocheck.c
+--- annobin.orig/annocheck/annocheck.c	2023-03-03 16:09:24.659603476 +0000
++++ annobin-11.12/annocheck/annocheck.c	2023-03-03 16:09:57.249530355 +0000
+@@ -20,6 +20,8 @@
  #include <sys/stat.h>
  #include <elfutils/libdwelf.h>
  #include <elfutils/libdwfl.h>
 +#undef  HAVE_LIBDEBUGINFOD 
 +#define HAVE_LIBDEBUGINFOD 0
  #ifndef LIBANNOCHECK
+ #include <rpm/rpmlib.h>
  #if HAVE_LIBDEBUGINFOD
- #include <elfutils/debuginfod.h>
