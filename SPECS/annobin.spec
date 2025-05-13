@@ -1,7 +1,7 @@
 
 Name:    annobin
 Summary: Annotate and examine compiled binary files
-Version: 12.65
+Version: 12.92
 Release: 1%{?dist}
 License: GPL-3.0-or-later AND LGPL-2.0-or-later AND (GPL-2.0-or-later WITH GCC-exception-2.0) AND (LGPL-2.0-or-later WITH GCC-exception-2.0) AND GFDL-1.3-or-later 
 # Maintainer: nickc@redhat.com
@@ -62,7 +62,7 @@ Source: https://nickc.fedorapeople.org/%{annobin_sources}
 %global annobin_source_dir %{_usrsrc}/annobin
 
 # Insert patches here, if needed.  Eg:
-# Patch01: annobin-strings-no-attach.patch
+# Patch01: annobin-plugin-callback.patch
 
 #---------------------------------------------------------------------------------
 
@@ -370,6 +370,55 @@ exit $res
 #---------------------------------------------------------------------------------
 
 %changelog
+* Fri Feb 14 2025 Nick Clifton  <nickc@redhat.com> - 12.92-1
+- Annocheck: Do not rely upon libelf's ability to detect links to separate debuginfo files.  (RHEL-79264)
+
+* Thu Feb 13 2025 Nick Clifton  <nickc@redhat.com> - 12.91-1
+- Annocheck: Fix resource leak.  (RHEL-79253)
+- Annocheck: Fix double free. Add special handling for COMBOOT modules.
+- Annocheck: Improve diagnostics when a separate debug info file cannot be found.
+
+* Mon Feb 03 2025 Nick Clifton  <nickc@redhat.com> - 12.88-1
+- Annocheck: Look for -fstack-clash-protection in DW_AT_producer string.  (RHEL-77489)
+
+* Thu Jan 30 2025 Nick Clifton  <nickc@redhat.com> - 12.87-1
+- Annocheck: Fix locating string notes (again).  Add exception for glibc benchmark tests.  (RHEL-76809)
+- Annocheck: Add crtoffloadtableS.o to list of known gcc binaries.  (RHEL-76040)
+
+* Mon Jan 27 2025 Nick Clifton  <nickc@redhat.com> - 12.85-1
+- Annocheck: Fix the --debug-dir option.
+
+* Thu Jan 23 2025 Nick Clifton  <nickc@redhat.com> - 12.84-1
+- Annocheck: Fix corrupt warning message when unable to locate separate debug info files.
+
+* Wed Jan 22 2025 Nick Clifton  <nickc@redhat.com> - 12.83-1
+- Annocheck: Remove spurious debugging messages.
+- Annocheck: Always look for annobin notes in separate debug info files.  (RHEL-75778)
+- Annocheck: Support multiple --debug-rpm and --debug-file options.  (RHEL-73349)
+- Annocheck: Add support for sys-root'ed glibc packages.  (RHEL-71296)
+- GCC Plugin: Tidy up use of gcc's diagnoatic headers.  (#32429)
+- Testsuite: Use configured compiler when running tests.
+- GCC Plugin: Fix building with gcc 15.  (#32429)
+- Annocheck: Fix overly long debug messages.
+- Annocheck: Rename rwx-seg test to load-segments.  Add more checks.  Add check for gaps as a future fail.
+- Annocheck: Add --no-allow-excpetions to disable exceptions for known special binaries.
+- Annocheck: Add --enable-future to enable future fail components in normal tests.
+- Annocheck: Fix bug preventing the inclusion of the rpm name in reports.
+- Annocheck: Add more exceptions for gcc binaries.  (RHEL-33365)
+- Annocheck: Add --skip-passes option.
+- Annocheck: Add exceptions for gcc binaries.  (RHEL-33365)
+- Annocheck: Skip property note test for i386 binaries created by LLVM.  (#2323797)
+- Annocheck: Skip FORTIFY and GLIBC_ASSERTIONS tests for LLVM produced binaries with unparseable DW_AT_producer attributes in their DWARF debug info.  (RHEL-65411)
+- GCC Plugin: Change type of the .annobin.notes section from SHT_STRTAB to SHT_PROGBITS.
+- Clang & LLVM Plugins: Include install directory in binary.  (RHEL-54069)
+- BuiltBy: Fix seg-fault when comparing language version strings.  (RHEL-53497)
+- Annocheck: Stop spurious assembler warnings.  (RHEL-53213)
+- Annocheck: Stop warnings about known gaps.    (RHEL-53218)
+- Annocheck: Fix stack realign test.  (#2302427)
+
+* Mon Nov 18 2024 Nick Clifton  <nickc@redhat.com> - 12.65-2
+- Spec File: NVR bump in order to allow rebuilding with LLVM 19.  (RHEL-66058)
+
 * Mon Jul 29 2024 Nick Clifton  <nickc@redhat.com> - 12.65-1
 - Annocheck: Fix recording arguments for later re-use.  (RHEL-50802)
 - Spec File: Add LTO option to clang and llvm plugin builds.  (RHEL-50796)
