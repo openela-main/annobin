@@ -1,7 +1,7 @@
 
 Name:    annobin
 Summary: Annotate and examine compiled binary files
-Version: 12.92
+Version: 12.98
 Release: 1%{?dist}
 License: GPL-3.0-or-later AND LGPL-2.0-or-later AND (GPL-2.0-or-later WITH GCC-exception-2.0) AND (LGPL-2.0-or-later WITH GCC-exception-2.0) AND GFDL-1.3-or-later 
 # Maintainer: nickc@redhat.com
@@ -206,6 +206,10 @@ touch configure */configure Makefile.in */Makefile.in
 # Similarly we do not want to rebuild the documentation.
 touch doc/annobin.info
 
+# Generate a source tarball for installation later with all the patches
+# applied.  This must be the last step in the prep section.
+tar -C ../ -cJf ../latest-annobin.tar.xz %{name}-%{version}
+
 #---------------------------------------------------------------------------------
 
 %build
@@ -313,7 +317,7 @@ cat `gcc --print-file-name=rpmver` > %{buildroot}/%{ANNOBIN_GCC_PLUGIN_DIR}/%{av
 
 # Also install a copy of the sources into the build tree.
 mkdir -p                            %{buildroot}%{annobin_source_dir}
-cp %{_sourcedir}/%{annobin_sources} %{buildroot}%{annobin_source_dir}/latest-annobin.tar.xz
+cp ../latest-annobin.tar.xz         %{buildroot}%{annobin_source_dir}/latest-annobin.tar.xz
 %endif
 
 rm -f %{buildroot}%{_infodir}/dir
@@ -370,6 +374,24 @@ exit $res
 #---------------------------------------------------------------------------------
 
 %changelog
+* Fri Jul 25 2025 Nick Clifton  <nickc@redhat.com> - 12.98-1
+- Rebase to 12.98.  (RHEL-105574)
+- Improve configure and meson files for consistent builds.
+- Annocheck: Delete the temporary debug info directory after the tests have finished.
+
+* Tue Jun 10 2025 Nick Clifton  <nickc@redhat.com> - 12.96-1
+- Annocheck: Fix bugs in debug rpm location code.  Add more glibc exceptions.  (RHEL-95216)
+- Annocheck: Improve performance with multiple debug info files and multiple files to scan.  (#2366180)
+- Annocheck: Update heuristic for detecting gcc files to cope with gcc 15.  (#2365824)
+
+* Wed Apr 30 2025 Nick Clifton  <nickc@redhat.com> - 12.93-1
+- Rebuild against LLVM v20.  (RHEL-82001)
+- Rebase to 12.93.
+- Annocheck: Fix test for GO revision.  (RHEL-56031)
+
+* Mon Mar 10 2025 Tulio Magno Quites Machado Filho <tuliom@redhat.com> - 12.92-2
+- Generate latest-annobin.tar.xz at prep phase (RHEL-82899)
+
 * Fri Feb 14 2025 Nick Clifton  <nickc@redhat.com> - 12.92-1
 - Annocheck: Do not rely upon libelf's ability to detect links to separate debuginfo files.  (RHEL-79264)
 
