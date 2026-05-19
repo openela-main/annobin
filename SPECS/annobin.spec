@@ -1,8 +1,8 @@
 
 Name:    annobin
 Summary: Annotate and examine compiled binary files
-Version: 12.99
-Release: 1%{?dist}
+Version: 13.02
+Release: 2%{?dist}
 License: GPL-3.0-or-later AND LGPL-2.0-or-later AND (GPL-2.0-or-later WITH GCC-exception-2.0) AND (LGPL-2.0-or-later WITH GCC-exception-2.0) AND GFDL-1.3-or-later
 URL: https://sourceware.org/annobin/
 # Maintainer: nickc@redhat.com
@@ -537,6 +537,15 @@ make check
 #---------------------------------------------------------------------------------
 
 %changelog
+* Tue Jan 13 2026 Nick Clifton  <nickc@redhat.com> - 13.02-2
+- Rebuild against LLVM 21.  (RHEL-108331)
+
+* Tue Nov 04 2025 Nick Clifton  <nickc@redhat.com> - 13.02-1
+- Annocheck: Update heuristic to detect gcc libraries.  (RHEL-124816)
+
+* Mon Oct 27 2025 Nick Clifton  <nickc@redhat.com> - 13.01-1
+- Annocheck: Change FAIL for binaries built by a cross compiler to a MAYBE.  (RHEL-123671)
+
 * Wed Aug 06 2025 Nick Clifton  <nickc@redhat.com> - 12.99-1
 - Annocheck: Improve detection of glibc static maths libraries.  (RHEL-107470)
 
