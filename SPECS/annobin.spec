@@ -1,8 +1,8 @@
 
 Name:    annobin
 Summary: Annotate and examine compiled binary files
-Version: 11.13
-Release: 2%{?dist}
+Version: 13.27
+Release: 1%{?dist}
 License: GPLv3+
 # Maintainer: nickc@redhat.com
 # Web Page: https://sourceware.org/annobin/
@@ -393,6 +393,12 @@ make check CLANG_TESTS="check-pre-clang-13"
 #---------------------------------------------------------------------------------
 
 %changelog
+* Wed Jul 22 2026 Nick Clifton  <nickc@redhat.com> - 13.27-1
+- Rebase in order to resolve testsuite problems on RHEL-8
+
+* Mon Jul 20 2026 Nick Clifton  <nickc@redhat.com> - 13.25-1
+- Annocheck: Improve bad filename detection.  (RHEL-211397)
+
 * Mon Jul 10 2023 Marek Polacek  <polacek@redhat.com> - 11.13-2
 - NVR bump to allow rebuilding.  (#2218984)
 
