@@ -1,8 +1,8 @@
 
-Name:    annobin
+Name: annobin
 Summary: Annotate and examine compiled binary files
-Version: 13.02
-Release: 2%{?dist}
+Version: 13.28
+Release: 1%{?dist}
 License: GPL-3.0-or-later AND LGPL-2.0-or-later AND (GPL-2.0-or-later WITH GCC-exception-2.0) AND (LGPL-2.0-or-later WITH GCC-exception-2.0) AND GFDL-1.3-or-later
 URL: https://sourceware.org/annobin/
 # Maintainer: nickc@redhat.com
@@ -72,8 +72,7 @@ Source: https://nickc.fedorapeople.org/%{annobin_sources}
 %global annobin_source_dir %{_usrsrc}/annobin
 
 # Insert patches here, if needed.  Eg:
-# Patch01: annobin-plugin-default-string-notes.patch
-# Patch01: annobin-gcc-plugin-input-filename.patch
+Patch01: annobin-debug-dir-path-check.patch
 
 #---------------------------------------------------------------------------------
 
@@ -537,6 +536,56 @@ make check
 #---------------------------------------------------------------------------------
 
 %changelog
+* Thu Jul 23 2026 Nick Clifton  <nickc@redhat.com> - 13.28-1
+- Annocheck: Fix bug checking the path safety of the --debug-dir option.
+- Annocheck: Add more exceptions for gcc components.  (RHEL-213510)
+- Annocheck: Fix seg-fault in code checking for gcc components.
+- Annocheck: Allow ~ in filenames.  
+- GCC-Plugin: Only use a 64-bit pointer size for s390x binaries built by GCC 17+  (#2502729)
+
+* Thu Jul 16 2026 Nick Clifton  <nickc@redhat.com> - 13.25-1
+- Annocheck: Improve bad filename detection.  (RHEL-211395)
+
+* Thu Jun 25 2026 Nick Clifton  <nickc@redhat.com> - 13.22-1
+- Annocheck: Enable stack-clash test for Risc-V binaries built by gcc-15+.
+- LLVM & Clang Plugins: Build with -fexceptions enabled.  (RHEL-184482)
+
+* Thu Jun 04 2026 Nick Clifton  <nickc@redhat.com> - 13.20-1
+- Annocheck: Add support for ZIP files and TAR balls.
+- Testsuite: Fixes for the glibcxx and hardening tests.
+- GCC Plugin: Fix several minor bugs.
+- Annocheck: Fix several minor bugs.
+- Testsuite: Fix discrepancies.
+- GCC Plugin: Fix recording the setting of __GLIBCXX_ASSERTIONS.
+- Annocheck: Add exceptions for kernel bootstrap tools.  (RHEL-73522)
+- Testsuite: Add new tests.
+
+* Thu May 14 2026 Nick Clifton  <nickc@redhat.com> - 13.16-1
+- GCC Plugin: Fix error when checking for function level changes in the PIC and GOW settings. 
+
+
+* Thu May 14 2026 Nick Clifton  <nickc@redhat.com> - 13.15-1
+- Annocheck: LTO test: Add exceptions for Clang runtime support object files.  (RHEL-176052)
+- Annocheck: Do not complain about GO binaries that do not support branch protection.
+- Annocheck: Do not complain about Rust binaries that do not support branch protection.
+
+* Fri Apr 24 2026 Nick Clifton  <nickc@redhat.com> - 13.12-1
+- Annocheck: Skip the dynamic-tags test if a GNU Property note is present.  (RHEL-170885)
+- Annocheck: Look for compromising characters in pathnames.
+
+* Mon Feb 23 2026 Nick Clifton  <nickc@redhat.com> - 13.10-1
+- Rebuild against LLVM 22.  (RHEL-140399)
+- Require C++17 for building.
+- Annocheck: Ignore Risc-V attribute sections.
+- Annocheck: Change result of failing not-XXX tests from FAIL to MAYB.  Update documentation.
+- Annocheck: Process the .ARM.attributes section.
+
+* Mon Feb 23 2026 Nick Clifton  <nickc@redhat.com> - 13.06-1
+- Annocheck: Add more files to the gcc heuristics list.  (RHEL-150659)
+- Annocheck: Add .fc44 to list of known rpm file extensions.
+- Annocheck: Fix compile time warnings from GCC-15 re: strchr returning a const char *.
+- Annocheck: Skip production test for gcc libraries.  (RHEL-123175)
+
 * Tue Jan 13 2026 Nick Clifton  <nickc@redhat.com> - 13.02-2
 - Rebuild against LLVM 21.  (RHEL-108331)
 
@@ -1182,7 +1231,7 @@ make check
 * Fri Dec 17 2021 Nick Clifton  <nickc@redhat.com> - 10.39-1
 - Annocheck: Add /usr/lib/ld-linux-aarch64.so.1 to the list of known glibc binaries.  (#2033255)
 - Doc: Note that ENDBR is only needed as the landing pad for indirect branches/calls.  (#28705)
-- Spec File: Store full	gcc version release string in plugin info file.  (#2030671)
+- Spec File: Store full gcc version release string in plugin info file.  (#2030671)
 
 * Tue Dec 14 2021 Nick Clifton  <nickc@redhat.com> - 10.38-1
 - Annocheck: Add special case for x86_64 RHEL-7 gaps.  (#2031133)
