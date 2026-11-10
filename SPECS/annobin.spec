@@ -1,9 +1,10 @@
 
 Name:    annobin
 Summary: Annotate and examine compiled binary files
-Version: 12.98
-Release: 2%{?dist}
-License: GPL-3.0-or-later AND LGPL-2.0-or-later AND (GPL-2.0-or-later WITH GCC-exception-2.0) AND (LGPL-2.0-or-later WITH GCC-exception-2.0) AND GFDL-1.3-or-later 
+Version: 13.28
+Release: 1%{?dist}
+License: GPL-3.0-or-later AND LGPL-2.0-or-later AND (GPL-2.0-or-later WITH GCC-exception-2.0) AND (LGPL-2.0-or-later WITH GCC-exception-2.0) AND GFDL-1.3-or-later
+URL: https://sourceware.org/annobin/
 # Maintainer: nickc@redhat.com
 # Web Page: https://sourceware.org/annobin/
 # Watermark Protocol: https://fedoraproject.org/wiki/Toolchain/Watermark
@@ -29,7 +30,7 @@ License: GPL-3.0-or-later AND LGPL-2.0-or-later AND (GPL-2.0-or-later WITH GCC-e
 # Use "--without gccplugin" to disable the building of the annobin plugin for GCC.
 %bcond_without gccplugin
 
-# Use "--with llvmplugin" to enable the building of the annobin plugin for LLVM.
+# Use "--without llvmplugin" to disable the building of the annobin plugin for LLVM.
 %bcond_without llvmplugin
 
 # Set this to zero to disable the requirement for a specific version of gcc.
@@ -374,6 +375,45 @@ exit $res
 #---------------------------------------------------------------------------------
 
 %changelog
+* Mon Jul 27 2026 Nick Clifton  <nickc@redhat.com> - 13.28-1
+- Testsuite: Fix hardening test.
+- Annocheck: Fix seg-fault in code checking for gcc components.
+- Annocheck: Allow ~ in filenames.  Add more exceptions for gcc components.  (RHEL-213510)
+- GCC-Plugin: Only use a 64-bit pointer size for s390x binaries built by GCC 17+  (#2502729)
+
+* Wed Jul 22 2026 Nick Clifton  <nickc@redhat.com> - 13.25-1
+- Annocheck: Improve bad filename detection.  (RHEL-211396)
+- Annocheck: Enable stack-clash test for Risc-V binaries built by gcc-15+.
+- LLVM & Clang Plugins: Build with -fexceptions enabled.  (RHEL-184482)
+- Annocheck: Add support for ZIP files and TAR balls.
+- Testsuite: Fixes for the glibcxx and hardening tests.
+- GCC Plugin: Fix several minor bugs.
+- Annocheck: Fix several minor bugs.
+- Testsuite: Fix discrepancies.
+- GCC Plugin: Fix recording the setting of __GLIBCXX_ASSERTIONS.
+- Annocheck: Add exceptions for kernel bootstrap tools.  (RHEL-73522)
+- Testsuite: Add new tests.
+- GCC Plugin: Fix error when checking for function level changes in the PIC and GOW settings. 
+- Annocheck: LTO test: Add exceptions for Clang runtime support object files.  (RHEL-176052)
+
+* Tue May 05 2026 Nick Clifton  <nickc@redhat.com> - 13.14-1
+- Rebase to allow rebuilding against LLVM 22.  (RHEL-140420)
+- Annocheck: Do not complain about GO binaries that do not support branch protection.
+- Annocheck: Do not complain about Rust binaries that do not support branch protection.
+- Annocheck: Skip the dynamic-tags test if a GNU Property note is present.
+- Annocheck: Look for compromising characters in pathnames.
+- Require C++17 for building.
+- Annocheck: Ignore Risc-V attribute sections.
+- Annocheck: Change result of failing not-XXX tests from FAIL to MAYB.  Update documentation.
+- Annocheck: Process the .ARM.attributes section.
+- Annocheck: Add more files to the gcc heuristics list.  (RHEL-150659)
+- Annocheck: Add .fc44 to list of known rpm file extensions.
+- Annocheck: Fix compile time warnings from GCC-15 re: strchr returning a const char *.
+- Annocheck: Skip production test for gcc libraries.  (RHEL-123175)
+- Annocheck: Update heuristic to detect gcc libraries.  (RHEL-124869)
+- Annocheck: Change FAIL for binaries built by a cross compiler to a MAYBE.  (RHEL-123175)
+- Annocheck: Improve detection of glibc static maths libraries.  (RHEL-107470)
+
 * Tue Jan 27 2026 Nick Clifton  <nickc@redhat.com> - 12.98-2
 - NVR bump to allow rebuilding against LLVM v21.  (RHEL-144392)
 
