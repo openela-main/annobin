@@ -1,7 +1,7 @@
 
 Name:    annobin
 Summary: Annotate and examine compiled binary files
-Version: 13.27
+Version: 13.29
 Release: 1%{?dist}
 License: GPLv3+
 # Maintainer: nickc@redhat.com
@@ -393,6 +393,10 @@ make check CLANG_TESTS="check-pre-clang-13"
 #---------------------------------------------------------------------------------
 
 %changelog
+* Thu Sep 17 2026 Nick Clifton  <nickc@redhat.com> - 13.29-1
+- Annocheck: Fix bug checking the path safety of the --debug-dir option.  (RHEL-252081)
+- Annocheck: Add more exceptions for gcc components.  (RHEL-213510)
+
 * Wed Jul 22 2026 Nick Clifton  <nickc@redhat.com> - 13.27-1
 - Rebase in order to resolve testsuite problems on RHEL-8
 
